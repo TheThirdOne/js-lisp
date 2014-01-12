@@ -1,13 +1,24 @@
-//still needs work
+//mostly done
 function compile(str){
-  var out = [];
-  var forw =/\(/g, back = /\)/g;
+  var stack = [];
+  var out = ['do'];
+  var current = out;
   var parsed = clean(str);
   var net = 0;
   for(var i = 0; i < parsed.length;i++){
-    
+    if(parsed[i]==='('){
+      stack.push(current);
+      current.push([]);
+      current = current[current.length-1];
+      continue;
+    }
+    if(parsed[i]===')'){
+      current = stack.pop();
+      continue;
+    }
+    current.push(parsed[i]);
   }
-  return parsed.join(" ").replace(/\(/g,'{').replace(/\)/g,'}');
+  return out;
 }
 //mostly done; may put some ( handling in here eventually
 function clean(str){
