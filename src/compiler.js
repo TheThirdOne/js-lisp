@@ -5,12 +5,8 @@ function compile(str){
   var parsed = clean(str);
   var net = 0;
   for(var i = 0; i < parsed.length;i++){
-    net += parsed[i].match(forw)-parsed[i].match(back);
-    if(net < 0)
-      throw "To many closing parens";
+    
   }
-  if(net > 0)
-    throw "To many opening parens";
   return parsed.join(" ").replace(/\(/g,'{').replace(/\)/g,'}');
 }
 //mostly done; may put some ( handling in here eventually
@@ -51,11 +47,19 @@ function clean(str){
       continue;
     }
     if(!comment&&!string&&/\s/.test(char)){ //separate about whitespace
-      console.log('yolo');
       if(start!=i)
         out.push(str.substring(start,i));
       start=i+1;
+      continue;
     }
+    if(!comment&&!string&&(char==='('||char===')')){ //separate about parens
+      if(start!=i)
+        out.push(str.substring(start,i));
+      out.push(char);
+      start=i+1;
+      continue;
+    }
+    
   }
   if(start!=i)
         out.push(str.substring(start,i));
