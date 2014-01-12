@@ -1,3 +1,6 @@
+function save(code){
+  return JSON.stringify(code).replace(/\\"/g,"\\'");
+}
 //mostly done
 function compile(str){
   var stack = [];
@@ -13,10 +16,16 @@ function compile(str){
       continue;
     }
     if(parsed[i]===')'){
+      if(stack.length===0)
+        throw "Unexpected )";
       current = stack.pop();
       continue;
     }
+    parsed[i]=parseFloat(parsed[i])||parsed[i];
     current.push(parsed[i]);
+  }
+  if(stack.length){
+    throw "Unexpected end of file. Expecting )";
   }
   return out;
 }
