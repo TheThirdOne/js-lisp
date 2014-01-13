@@ -1,6 +1,9 @@
 function save(code){
   return JSON.stringify(code).replace(/\\"/g,"\\'");
 }
+function load(code){
+  return JSON.parse(code);
+}
 //mostly done
 function compile(str){
   var stack = [];
