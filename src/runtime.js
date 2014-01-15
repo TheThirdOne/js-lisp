@@ -10,8 +10,8 @@ function run(code){
   }
   var temp =function(b){
               var c;
-              return function(){
-                if(!c)
+              return function(rerun){
+                if(!c || rerun)
                   c = run(code[b]);
                 return c;
               };
