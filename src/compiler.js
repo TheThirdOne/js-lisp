@@ -24,7 +24,7 @@ function parse(str){
       current = stack.pop();
       continue;
     }
-    parsed[i]=parseFloat(parsed[i])||parsed[i];
+    parsed[i]=(isNaN(parseFloat(parsed[i])))?parsed[i]:parseFloat(parsed[i]);
     current.push(parsed[i]);
   }
   if(stack.length){
