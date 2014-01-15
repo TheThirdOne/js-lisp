@@ -42,8 +42,11 @@ env['/'] = function(args){
   }
   return out;
 };
+
 //boolean logic
 env.and = function(args){
+  if(!args.length)
+    throw "Not enough arguments";
   for(var i = 0; i < args.length;i++){
     if(!args[i]())
       return args[i]();
@@ -51,10 +54,49 @@ env.and = function(args){
   return true;
 };
 env.or = function(args){
+  if(!args.length)
+    throw "Not enough arguments";
   for(var i = 0; i < args.length;i++){
     if(args[i]())
       return args[i]();
   }
   return false;
 };
-
+env.not = function(args){
+  if(!args.length)
+    throw "Not enough arguments";
+  return !args[0]();
+};
+env['='] = function(args){
+    if(args.length < 2)
+    throw "Not enough arguments";
+  var out = true;
+  for(var i = 1; i < args.length;i++){
+    out &= args[i-1]() == args[i]();
+  }
+  return !!out;
+};
+env['<='] = function(args){
+  if(args.length < 2)
+    throw "Not enough arguments";
+  var out = true;
+  for(var i = 1; i < args.length;i++){
+    out &= args[i-1]() > args[i]();
+  }
+  return !out;
+};
+env['>'] = function(args){
+  return !env['<='](args);
+};
+env['>='] = function(args){
+  if(args.length < 2)
+    throw "Not enough arguments";
+  var out = true;
+  for(var i = 1; i < args.length;i++){
+    out &= args[i-1]() < args[i]();
+  }
+  return !out;
+};
+env['<'] = function(args){
+  return !env['<='](args);
+};
