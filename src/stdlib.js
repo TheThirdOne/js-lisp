@@ -15,7 +15,19 @@ env.log = function(args){
 };
 
 //arithmetic operations
+env.int = function(args){
+  if(!args.length)
+    throw "Not enough arguments";
+  return parseInt(args[0](),10);
+};
+env.float = function(args){
+  if(!args.length)
+    throw "Not enough arguments";
+  return parseFloat(args[0](),10);
+};
 env['+'] = function(args){
+  if(!args.length)
+    throw "Not enough arguments";
   var out = args[0]();
   for(var i = 1; i < args.length;i++){
     out += args[i]();
@@ -23,6 +35,8 @@ env['+'] = function(args){
   return out;
 }; 
 env['*'] = function(args){
+  if(!args.length)
+    throw "Not enough arguments";
   var out = args[0]();
   for(var i = 1; i < args.length;i++){
     out *= args[i]();
@@ -30,6 +44,8 @@ env['*'] = function(args){
   return out;
 };
 env['-'] = function(args){
+  if(!args.length)
+    throw "Not enough arguments";
   var out = args[0]();
   for(var i = 1; i < args.length;i++){
     out -= args[i]();
@@ -37,6 +53,8 @@ env['-'] = function(args){
   return out;
 };
 env['/'] = function(args){
+  if(!args.length)
+    throw "Not enough arguments";
   var out = args[0]();
   for(var i = 1; i < args.length;i++){
     out /= args[i]();
@@ -50,7 +68,7 @@ env.bool = function(args){
     throw "Not enough arguments";
   return !!args[0]();
 };
-env.and = function(args){
+env.and  = function(args){
   if(!args.length)
     throw "Not enough arguments";
   for(var i = 0; i < args.length;i++){
@@ -59,7 +77,7 @@ env.and = function(args){
   }
   return true;
 };
-env.or = function(args){
+env.or   = function(args){
   if(!args.length)
     throw "Not enough arguments";
   for(var i = 0; i < args.length;i++){
@@ -68,7 +86,7 @@ env.or = function(args){
   }
   return false;
 };
-env.not = function(args){
+env.not  = function(args){
   if(!args.length)
     throw "Not enough arguments";
   return !args[0]();
@@ -82,7 +100,7 @@ env['='] = function(args){
   }
   return !!out;
 };
-env['<='] = function(args){
+env['<=']= function(args){
   if(args.length < 2)
     throw "Not enough arguments";
   var out = true;
@@ -94,7 +112,7 @@ env['<='] = function(args){
 env['>'] = function(args){
   return !env['<='](args);
 };
-env['>='] = function(args){
+env['>=']= function(args){
   if(args.length < 2)
     throw "Not enough arguments";
   var out = true;

@@ -9,13 +9,13 @@ function run(code){
     key = code[0];
   }
   var temp =function(b){
-              var c;
-              return function(rerun){
-                if(!c || rerun)
-                  c = run(code[b]);
-                return c;
-              };
-            };
+    var c;
+    return function(rerun){
+      if(!c || rerun)
+        c = run(code[b]);
+      return c;
+    };
+  };
   for(var i = 1;i<code.length;i++){
     args[i-1]=temp(i);
   }
