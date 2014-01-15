@@ -19,11 +19,12 @@ test(clean,["a","b","c","'d;e'","f","g"],"a b c 'd;e' f g"); //comment in string
 
 //parsing
 test(parse,["do",['a','b','c']],"(a b c)"); //basic test
+test(parse,["do",['a', 1, 2]],"(a 1 2)"); //basic numbers test
 test(parse,["do",['a',['b','c',['d']],'e']],"(a (b c (d)) e)"); //basic stack
 test(parse,["do",['a',[['b'],'c'],'d']],"(a ((b) c) d)"); //first function
 test(parse,["do",['a','b','c']],"(a) (b) (c)"); //separate commands
-test(parse,["do",['a',"'hello there'"]],"(a 'hello there')"); //strings ' 
-test(parse,["do",['a','"hello there"']],'(a "hello there")'); //strings "
+test(parse,["do",['a','STRING:hello there']],"(a 'hello there')"); //strings ' 
+test(parse,["do",['a','STRING:hello there']],'(a "hello there")'); //strings "
 
 //biooleans
 test_env('(bool 3)',true);

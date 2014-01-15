@@ -4,6 +4,13 @@ function save(code){
 function load(code){
   return JSON.parse(code);
 }
+function symbolize(str){
+  if(!isNaN(parseFloat(str)))
+    return parseFloat(str);
+  if(str[0] === '"' || str[0]==="'")
+    return "STRING:"+str.slice(1,str.length-1);
+  return str;
+}
 //mostly done
 function parse(str){
   var stack = [];
@@ -24,7 +31,7 @@ function parse(str){
       current = stack.pop();
       continue;
     }
-    parsed[i]=(isNaN(parseFloat(parsed[i])))?parsed[i]:parseFloat(parsed[i]);
+    parsed[i]=symbolize(parsed[i]);
     current.push(parsed[i]);
   }
   if(stack.length){
@@ -82,7 +89,6 @@ function clean(str){
       start=i+1;
       continue;
     }
-    
   }
   if(start!=i)
         out.push(str.substring(start,i));
