@@ -9,8 +9,8 @@ function run(code){
     key = code[0];
   }
   var temp =function(b){
+              var c;
               return function(){
-                var c;
                 if(!c)
                   c = run(code[b]);
                 return c;
