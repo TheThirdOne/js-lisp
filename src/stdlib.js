@@ -98,5 +98,5 @@ env['>='] = function(args){
   return !out;
 };
 env['<'] = function(args){
-  return !env['<='](args);
+  return !env['>='](args);
 };
