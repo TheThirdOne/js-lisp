@@ -26,6 +26,8 @@ test(parse,["do",['a',"'hello there'"]],"(a 'hello there')"); //strings '
 test(parse,["do",['a','"hello there"']],'(a "hello there")'); //strings "
 
 //biooleans
+test_env('(bool 3)',true);
+test_env('(bool 0)',false);
 test_env('(> 3 2 1)',true);
 test_env('(> 3 2 2)',false);
 test_env('(>= 3 2 2)',true);
@@ -42,5 +44,8 @@ test_env('(or 0 0 4)',4);
 test_env('(or 0 0 0)',false);
 test_env('(and 1 1 5 2)',true);
 
+//control structure
+test_env('(if 1 1 2)',1);
+test_env('(if 0 1 2)',2);
 
 console.log('Tests complete');

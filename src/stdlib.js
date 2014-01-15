@@ -13,6 +13,7 @@ env.log = function(args){
   console.log(str);
   return str;
 };
+
 //arithmetic operations
 env['+'] = function(args){
   var out = args[0]();
@@ -44,6 +45,11 @@ env['/'] = function(args){
 };
 
 //boolean logic
+env.bool = function(args){
+  if(!args.length)
+    throw "Not enough arguments";
+  return !!args[0]();
+};
 env.and = function(args){
   if(!args.length)
     throw "Not enough arguments";
@@ -99,4 +105,15 @@ env['>='] = function(args){
 };
 env['<'] = function(args){
   return !env['>='](args);
+};
+
+//control structure
+env.if = function(args){
+  if(args[0]&&args[0]()){
+    if(args[1])
+      return args[1]();
+  }else{
+    if(args[2])
+      return args[2]();
+  }
 };
