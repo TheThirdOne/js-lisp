@@ -5,7 +5,7 @@ function load(code){
   return JSON.parse(code);
 }
 //mostly done
-function compile(str){
+function parse(str){
   var stack = [];
   var out = ['do'];
   var current = out;
