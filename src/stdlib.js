@@ -62,6 +62,11 @@ env['/'] = function(args){
   return out;
 };
 
+env.string = function(args){
+  if(!args.length)
+    throw "Not enough arguments";
+  return ""+args[0]();
+};
 //boolean logic
 env.bool = function(args){
   if(!args.length)
