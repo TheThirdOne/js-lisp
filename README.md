@@ -15,4 +15,4 @@ Reasons for Creation:
 TODO:
   - Compiler
   - Finish STDlib
-  - Target Node
+  - Make automated tests
