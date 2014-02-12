@@ -26,7 +26,7 @@ test(jslisp.compiler.parse,["do",['a','b','c']],"(a) (b) (c)"); //separate comma
 test(jslisp.compiler.parse,["do",['a','STRING:hello there']],"(a 'hello there')"); //strings ' 
 test(jslisp.compiler.parse,["do",['a','STRING:hello there']],'(a "hello there")'); //strings "
 
-//biooleans
+//booleans
 test_env('(bool 3)',true);
 test_env('(bool 0)',false);
 test_env('(> 3 2 1)',true);

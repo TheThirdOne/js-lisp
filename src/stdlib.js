@@ -136,4 +136,10 @@
         return args[2]();
     }
   };
+  env.while = function(args){
+    if(args.length < 2)
+      throw "Not enough arguments";
+    while(args[0](true))
+      args[1](true);
+  };
 })(exports||jslisp.runtime.env);
