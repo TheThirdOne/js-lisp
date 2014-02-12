@@ -1,0 +1,37 @@
+{
+  "name": "JSLisp",
+  "description": "Lisp implemented in Javascript for the browser and Node",
+  "version": "0.1.0",
+  "homepage": "https://github.com/TheThirdOne/js-lisp",
+  "author": {
+    "name": "Benjamin Landers",
+    "email": "benjaminrlanders@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheThirdOne/js-lisp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TheThirdOne/js-lisp/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/TheThirdOne/js-lisp/blob/master/LICENSE"
+    }
+  ],
+  "main": "lib/JSLisp.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt nodeunit"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt": "~0.4.2"
+  },
+  "keywords": []
+}
