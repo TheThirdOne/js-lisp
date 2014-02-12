@@ -4,27 +4,27 @@ function test(func,output,input){
   return true;
 }
 function test_env(command,output){
-  if(output!==run(parse(command)))
+  if(output!==jslisp.runtime.run(jslisp.compiler.parse(command)))
     throw output + ", "+ command;
   return true;
 }
 
 //cleaning
-test(clean,["a","b","c","d","e","f"],"a b c d e f");         //basic
-test(clean,["a","b","c","'d e'","f","g"],"a b c 'd e' f g"); //quotes
-test(clean,["a","b","c","f","g"],"a b c ;d e\n f g");        //single comment
-test(clean,["a","b","c","f","g"],"a b c #|d \n e|# f g");    //block comment
-test(clean,["a","b","c","f","g"],"a b c #|d  'e|# f g");     //quote in block
-test(clean,["a","b","c","'d;e'","f","g"],"a b c 'd;e' f g"); //comment in string
+test(jslisp.compiler.clean,["a","b","c","d","e","f"],"a b c d e f");         //basic
+test(jslisp.compiler.clean,["a","b","c","'d e'","f","g"],"a b c 'd e' f g"); //quotes
+test(jslisp.compiler.clean,["a","b","c","f","g"],"a b c ;d e\n f g");        //single comment
+test(jslisp.compiler.clean,["a","b","c","f","g"],"a b c #|d \n e|# f g");    //block comment
+test(jslisp.compiler.clean,["a","b","c","f","g"],"a b c #|d  'e|# f g");     //quote in block
+test(jslisp.compiler.clean,["a","b","c","'d;e'","f","g"],"a b c 'd;e' f g"); //comment in string
 
 //parsing
-test(parse,["do",['a','b','c']],"(a b c)"); //basic test
-test(parse,["do",['a', 1, 2]],"(a 1 2)"); //basic numbers test
-test(parse,["do",['a',['b','c',['d']],'e']],"(a (b c (d)) e)"); //basic stack
-test(parse,["do",['a',[['b'],'c'],'d']],"(a ((b) c) d)"); //first function
-test(parse,["do",['a','b','c']],"(a) (b) (c)"); //separate commands
-test(parse,["do",['a','STRING:hello there']],"(a 'hello there')"); //strings ' 
-test(parse,["do",['a','STRING:hello there']],'(a "hello there")'); //strings "
+test(jslisp.compiler.parse,["do",['a','b','c']],"(a b c)"); //basic test
+test(jslisp.compiler.parse,["do",['a', 1, 2]],"(a 1 2)"); //basic numbers test
+test(jslisp.compiler.parse,["do",['a',['b','c',['d']],'e']],"(a (b c (d)) e)"); //basic stack
+test(jslisp.compiler.parse,["do",['a',[['b'],'c'],'d']],"(a ((b) c) d)"); //first function
+test(jslisp.compiler.parse,["do",['a','b','c']],"(a) (b) (c)"); //separate commands
+test(jslisp.compiler.parse,["do",['a','STRING:hello there']],"(a 'hello there')"); //strings ' 
+test(jslisp.compiler.parse,["do",['a','STRING:hello there']],'(a "hello there")'); //strings "
 
 //biooleans
 test_env('(bool 3)',true);
