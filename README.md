@@ -13,7 +13,7 @@ Reasons for Creation:
   - In JavaScript
 
 TODO:
-  - *Variables*
-  - Compiler
+  - **Variables**
+  - Compiling to Javascript
   - Finish STDlib
   - Make automated tests
