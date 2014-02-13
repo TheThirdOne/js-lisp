@@ -1,6 +1,6 @@
 'use strict';
 
-var JSLisp = require('../lib/JSLisp.js');
+var JSLisp = require('../main/node.js');
 
 /*
   ======== A Handy Little Nodeunit Reference ========

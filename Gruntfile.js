@@ -1,11 +1,35 @@
 'use strict';
 
 module.exports = function(grunt) {
-
+  var sources = 'lib/**/*.js';
   // Project configuration.
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
+      '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+      '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
+      '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+      ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
     nodeunit: {
       files: ['test/**/*_test.js'],
+    },
+    concat: {
+      options: {
+        separator: '\n',
+      },
+      dist: {
+        src: ['main/browser.js',sources],
+        dest: 'build/concat.js',
+      },
+    },
+    uglify: {
+      options: {
+        banner: '<%= banner %>'
+      },
+      dist: {
+        src: '<%= concat.dist.dest %>',
+        dest: 'build/<%= pkg.name %>.min.js'
+      }
     },
     jshint: {
       options: {
@@ -15,7 +39,7 @@ module.exports = function(grunt) {
         src: 'Gruntfile.js'
       },
       lib: {
-        src: ['lib/**/*.js']
+        src: ['main/node.js',sources]
       },
       test: {
         src: ['test/**/*.js']
@@ -38,11 +62,13 @@ module.exports = function(grunt) {
   });
 
   // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'nodeunit']);
+  grunt.registerTask('default', ['jshint', 'nodeunit','concat','uglify']);
 
 };
