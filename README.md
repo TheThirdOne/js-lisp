@@ -16,4 +16,10 @@ TODO:
   - **Variables**
   - Compiling to Javascript
   - Finish STDlib
-  - Make automated tests
+
+How to Use
+----------
+
+Before every commit make sure ```grunt hint test``` runs without errors.   
+Inorder to build a browser version run ```grunt build```.   
+Or if it hasn't been tested yet ```grunt```.
