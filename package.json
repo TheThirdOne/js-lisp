@@ -1,5 +1,5 @@
 {
-  "name": "JSLisp",
+  "name": "jslisp",
   "description": "Lisp implemented in Javascript for the browser and Node",
   "version": "0.1.0",
   "homepage": "https://github.com/TheThirdOne/js-lisp",
