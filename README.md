@@ -1,6 +1,6 @@
-JSLisp [Latest Build](https://drone.io/github.com/TheThirdOne/js-lisp/files/build/jslisp.min.js) [![Build Status](https://drone.io/github.com/TheThirdOne/js-lisp/status.png)](https://drone.io/github.com/TheThirdOne/js-lisp/latest)
+JSLisp [![Build Status](https://drone.io/github.com/TheThirdOne/js-lisp/status.png)](https://drone.io/github.com/TheThirdOne/js-lisp/latest)
 =======
-
+[Latest Build](https://drone.io/github.com/TheThirdOne/js-lisp/files/build/jslisp.min.js)
 
 
 Lisp implemented only in JavaScript. Heavy influence from ClojureScript, Haskell and of course JavaScript. Mainly made to increase my knowledge of compiler theory, but also to make a really easily compiled lisp that can run anywhere.
