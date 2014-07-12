@@ -81,7 +81,7 @@ function getRest(condition,last){ //helpful to grap a bunch of characters matchi
   return out;
 }
 var a = function(){
-  var arr = '(def a (+ 5 6))(def b (+ a 9))(+ 8 9)'.split('');
+  var arr = '(defun  macro (a b c) (+ a b c a b c))'.split('');
   var i = 0;
   return [function(){ //temporary
     i++;
@@ -162,18 +162,26 @@ a = function(){
     return i;
   },
   function(){
-    return code.slice(0,code.length - 1);
+    return code.slice(0,-1);
   },
   function(){
-    return me[2]().split('\n').map(function(a,b){return 'i['+b+'] = '+a}).join('\n');
+    return 'var i = [], env = {};\n' + me[2]().split('\n').map(function(a,b){return 'i['+b+'] = '+a}).join('\n');
+  },
+  function(str){
+    code += str;
+  },
+  function(a){
+    code = code.slice(0,a||-1);
   }];
   
   return me;
 }();
 
-writeCode = a[0];
+writeLine = a[0];
 getCode = a[2];
 finishCode = a[3];
+writeStr = a[4];
+sliceCode = a[5];
 
 var types = {};
 types.string = {codegen:function(a){return '"' + a + '"'}};
@@ -181,9 +189,34 @@ types.number = {codegen:function(a){return a}};
 types.identifier = {codegen:function(a){return 'env["'+a+'"]'}};
 
 var stdlib = {};
-stdlib['+'] = {premap:true,codegen:function(arr){return writeCode('('+arr.join(' + ')+');')}};
-stdlib['*'] = {premap:true,codegen:function(arr){return writeCode('('+arr.join(' * ')+');')}};
+stdlib['+'] = {premap:true,codegen:function(arr){return writeLine('('+arr.join(' + ')+');')}};
+stdlib['*'] = {premap:true,codegen:function(arr){return writeLine('('+arr.join(' * ')+');')}};
 stdlib.def  = {codegen:function(arr){
-                if(arr[0].token !== 'identifier')throw 'Unexpected token: ' + token.data;
-                return writeCode('env["'+arr[0].data+'"] = ' + codegen(arr[1]) + ';');
+                if(arr[0].token !== 'identifier')throw 'Unexpected token: ' + arr[0].data;
+                return writeLine('env["'+arr[0].data+'"] = ' + codegen(arr[1]) + ';'); //env[identifier] = value
+              }};
+stdlib.defun  = {codegen:function(arr){
+                var out = '';
+                if(arr[0].token === 'identifier'){
+                  out += 'env["'+arr[0].data+'"] =';
+                }
+                out += 'function(', tmp = '';
+                arr.shift();
+                if(arr[0].length){
+                  for(var i in arr[0]){
+                    if(arr[0][i].token !== 'identifier')throw 'Unexpected token: ' + arr[0][i].data; //think about argunmentless args
+                  }
+                  out += arr[0].map(function(a){return a.data}).join(', ');
+                  tmp = arr[0].map(function(a){return 'env["'+a.data+'"] = ' + a.data + ';'}).join('')
+                }
+                if(arr[0].length !== undefined)
+                  arr.shift();
+                out += '){var env = {}, i = [];' + tmp;
+                writeLine(out);
+                tmp = arr.pop();
+                arr.map(function(a){return codegen(a)});
+                tmp = codegen(tmp)
+                sliceCode(-1);
+                writeStr('return '+tmp+';}\n');
+                return ;
               }};
