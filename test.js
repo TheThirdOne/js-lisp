@@ -24,9 +24,9 @@ function getTok(){
     return {token:'\'',index:getIndex()};
   }
   
-  if(!!lastChar.match(/[a-zA-Z]/)){ //identifiers
+  if(!!lastChar.match(/[^"0-9]/)){ //identifiers
     return {token: 'identifier',
-            data:   getRest(/[a-zA-Z0-9]/,lastChar),
+            data:   getRest(/[^()'"\s]/,lastChar),
             index:  getIndex()};
   }
   if(!!lastChar.match(/[0-9]/)){ //numbers
@@ -42,11 +42,9 @@ function getTok(){
       if(lastChar === ''){
         throw "Unexpected EOF";
       }
-      if(lastChar !== '\\' || escaping){
-        //fancyness to handle any escaped cahracter
-        //esssentially it makes json including the character and then parses it
-        out += (!escaping)?lastChar:JSON.parse('{"data":"\\'+lastChar+'"}').data;
-      }
+      
+      out += lastChar;
+      
       escaping = lastChar === '\\' && !escaping;
       lastChar = getChar();
     }
@@ -83,7 +81,7 @@ function getRest(condition,last){ //helpful to grap a bunch of characters matchi
   return out;
 }
 var a = function(){
-  var arr = "(clean input and parse (more \"parens\")'(hello world))".split('');
+  var arr = '(+ a h (* "hhhhh" ehhasaf))'.split('');
   var i = 0;
   return [function(){ //temporary
     i++;
@@ -132,6 +130,46 @@ function parseList(tok){
     throw "Unexpected token: " + (t.data || t.token);
   }
   var out = parseExpr();
-  out.type = 'List';
+  out.unshift({token:'identifier',data:'list'});
   return out;
 }
+function codegen(expr){
+  if(!expr.length){
+    if(!types[expr.token])
+      throw "Nonexistent Token";  //should not be called if parsed with this parser
+    return types[expr.token].codegen(expr.data);
+  }
+  var temp = expr.shift();
+  if(temp.token === 'identifier'){
+    if(!stdlib[temp.data])
+      throw "Nonexistent fucntion call";
+    var arr = expr;
+    if(stdlib[temp.data].premap){
+      arr = arr.map(function(a){return codegen(a)});
+    }
+    return stdlib[temp.data].codegen(arr);
+  }
+}
+a = function(){
+  var code = '', i = 0;
+  return [function(str){
+    code += str + '\n';
+    return i++;
+  },
+  /*function(){
+    return i;
+  },*/
+  function(){
+    return code.slice(0,code.length - 1);
+  }]
+}();
+writeCode = a[0];
+getCode = a[1]; // getCode().split('\n').map(function(a,b){return '$'+b+' = '+a+';'}).join('\n')
+
+var types = {};
+types['string'] = {codegen:function(a){return '"' + a + '"'}};
+types['number'] = {codegen:function(a){return a}}
+types['identifier'] = {codegen:function(a){return a}}
+var stdlib = {};
+stdlib['+'] = {premap:true,codegen:function(arr){return '$' + writeCode('('+arr.join(' + ')+')')}};
+stdlib['*'] = {premap:true,codegen:function(arr){return '$' + writeCode('('+arr.join(' * ')+')')}}
