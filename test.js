@@ -81,7 +81,7 @@ function getRest(condition,last){ //helpful to grap a bunch of characters matchi
   return out;
 }
 var a = function(){
-  var arr = '(defun  macro (a b c) (+ a b c a b c))'.split('');
+  var arr = '(defun  macro (a b c) (def d (+ a b c a b c)) ((js "console.log" "console") d) (call h 1 2 3))'.split('');
   var i = 0;
   return [function(){ //temporary
     i++;
@@ -140,15 +140,15 @@ function codegen(expr){
     return types[expr.token].codegen(expr.data);
   }
   var temp = expr.shift();
-  if(temp.token === 'identifier'){
-    if(!stdlib[temp.data])
-      throw "Nonexistent fucntion call";
+  if(temp.token === 'identifier' && stdlib[temp.data]){
     var arr = expr;
     if(stdlib[temp.data].premap){
       arr = arr.map(function(a){return codegen(a)});
     }
     return stdlib[temp.data].codegen(arr);
   }
+  expr.unshift(temp);
+  return stdlib.call.codegen(expr.map(function(a){return codegen(a)}));
 }
 a = function(){
   var code = '', i = 0;
@@ -177,11 +177,11 @@ a = function(){
   return me;
 }();
 
-writeLine = a[0];
-getCode = a[2];
+writeLine  = a[0];
+getCode    = a[2];
 finishCode = a[3];
-writeStr = a[4];
-sliceCode = a[5];
+writeStr   = a[4];
+sliceCode  = a[5];
 
 var types = {};
 types.string = {codegen:function(a){return '"' + a + '"'}};
@@ -191,6 +191,15 @@ types.identifier = {codegen:function(a){return 'env["'+a+'"]'}};
 var stdlib = {};
 stdlib['+'] = {premap:true,codegen:function(arr){return writeLine('('+arr.join(' + ')+');')}};
 stdlib['*'] = {premap:true,codegen:function(arr){return writeLine('('+arr.join(' * ')+');')}};
+stdlib.call = {premap:true,codegen:function(arr){return writeLine(arr.shift()+"(" + arr.join(', ') + ');');}};
+stdlib.js   = {codegen:function(arr){
+              for(var i in arr){
+                if(!arr[i].primary)throw 'Unexpected non-primary';
+              }
+              return writeLine(arr[0].data + '.bind(' + arr[1].data + ');');
+            }
+  
+};
 stdlib.def  = {codegen:function(arr){
                 if(arr[0].token !== 'identifier')throw 'Unexpected token: ' + arr[0].data;
                 return writeLine('env["'+arr[0].data+'"] = ' + codegen(arr[1]) + ';'); //env[identifier] = value
