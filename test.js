@@ -81,7 +81,7 @@ function getRest(condition,last){ //helpful to grap a bunch of characters matchi
   return out;
 }
 var a = function(){
-  var arr = '(+ a h (* "hhhhh" ehhasaf))'.split('');
+  var arr = '(def a (+ 5 6))(def b (+ a 9))(+ 8 9)'.split('');
   var i = 0;
   return [function(){ //temporary
     i++;
@@ -152,24 +152,38 @@ function codegen(expr){
 }
 a = function(){
   var code = '', i = 0;
-  return [function(str){
+  
+  var me = [
+  function(str){
     code += str + '\n';
-    return i++;
+    return 'i[' + i++ + ']';
   },
-  /*function(){
+  function(){
     return i;
-  },*/
+  },
   function(){
     return code.slice(0,code.length - 1);
-  }]
+  },
+  function(){
+    return me[2]().split('\n').map(function(a,b){return 'i['+b+'] = '+a}).join('\n');
+  }];
+  
+  return me;
 }();
+
 writeCode = a[0];
-getCode = a[1]; // getCode().split('\n').map(function(a,b){return '$'+b+' = '+a+';'}).join('\n')
+getCode = a[2];
+finishCode = a[3];
 
 var types = {};
-types['string'] = {codegen:function(a){return '"' + a + '"'}};
-types['number'] = {codegen:function(a){return a}}
-types['identifier'] = {codegen:function(a){return a}}
+types.string = {codegen:function(a){return '"' + a + '"'}};
+types.number = {codegen:function(a){return a}};
+types.identifier = {codegen:function(a){return 'env["'+a+'"]'}};
+
 var stdlib = {};
-stdlib['+'] = {premap:true,codegen:function(arr){return '$' + writeCode('('+arr.join(' + ')+')')}};
-stdlib['*'] = {premap:true,codegen:function(arr){return '$' + writeCode('('+arr.join(' * ')+')')}}
+stdlib['+'] = {premap:true,codegen:function(arr){return writeCode('('+arr.join(' + ')+');')}};
+stdlib['*'] = {premap:true,codegen:function(arr){return writeCode('('+arr.join(' * ')+');')}};
+stdlib.def  = {codegen:function(arr){
+                if(arr[0].token !== 'identifier')throw 'Unexpected token: ' + token.data;
+                return writeCode('env["'+arr[0].data+'"] = ' + codegen(arr[1]) + ';');
+              }};
