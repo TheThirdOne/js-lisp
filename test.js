@@ -81,7 +81,7 @@ function getRest(condition,last){ //helpful to grap a bunch of characters matchi
   return out;
 }
 var a = function(){
-  var arr = '(let ((h 7) (y 0) (b 1)) (+ y b h))'.split('');
+  var arr = '()'.split('');
   var i = 0;
   return [function(){ //temporary
     i++;
@@ -165,7 +165,7 @@ a = function(){
     return code.slice(0,-1);
   },
   function(){
-    return 'var i = [], out = {};\n'+me[2]().split('\n').map(function(a,b){return 'i['+b+'] = '+a}).join('\n');
+    return 'var i = [], env = {};\n'+me[2]().split('\n').map(function(a,b){return 'i['+b+'] = '+a}).join('\n');
   },
   function(str){
     code += str;
@@ -192,10 +192,10 @@ var stdlib = {};
 stdlib['+'] = {premap:true,codegen:function(arr){return writeLine('('+arr.join(' + ')+');')}};
 stdlib['*'] = {premap:true,codegen:function(arr){return writeLine('('+arr.join(' * ')+');')}};
 stdlib.call = {premap:true,codegen:function(arr){return writeLine(arr.shift()+"(" + arr.join(', ') + ');');}};
-stdlib.do   = {premap:true,codegen:function(arr){return writeLine(arr[arr.length-1]);}};
+stdlib.do   = {premap:true,codegen:function(arr){return arr[arr.length-1];}};
 stdlib.js   = {codegen:function(arr){
               for(var i in arr){
-                if(!arr[i].primary)throw 'Unexpected non-primary';
+                if(!(arr[i].primary || arr[i].token === 'identifier'))throw 'Unexpected non-primary';
               }
               return writeLine(arr[0].data + '.bind(' + arr[1].data + ');');
             }};
@@ -220,7 +220,9 @@ stdlib.let = {codegen:function(arr){
               if(arr[0].length === undefined)throw "Lacks argument list";
               var t = [[],[]], tmp = '';
               for(var i in arr[0]){
-                if(arr[0][i].token !== 'identifier' && arr[0][i].length === undefined)throw 'Unexpected token: ' + arr[0][i].data;
+                if(arr[0][i].token !== 'identifier' && arr[0][i].length === undefined){
+                  throw 'Unexpected token: ' + arr[0][i].data;
+                }
                 t[0][i] = arr[0][i].data || arr[0][i][0].data;
                 t[1][i] = arr[0][i][0] && arr[0][i][1];
               }
@@ -252,7 +254,7 @@ stdlib.defun  = {codegen:function(arr){
                 arr.shift();
                 if(arr[0].length){
                   for(var i in arr[0]){
-                    if(arr[0][i].token !== 'identifier')throw 'Unexpected token: ' + arr[0][i].data; //think about argunmentless args
+                    if(arr[0][i].token !== 'identifier')throw 'Unexpected token: ' + arr[0][i].data;
                   }
                   out += arr[0].map(function(a){return a.data}).join(', ');
                   tmp = arr[0].map(function(a){return 'env["'+a.data+'"] = ' + a.data + ';'}).join('')
