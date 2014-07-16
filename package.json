@@ -1,7 +1,7 @@
 {
   "name": "jslisp",
   "description": "Lisp implemented in Javascript for the browser and Node",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "homepage": "https://github.com/TheThirdOne/js-lisp",
   "author": {
     "name": "Benjamin Landers",
