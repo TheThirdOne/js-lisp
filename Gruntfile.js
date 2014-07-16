@@ -13,24 +13,6 @@ module.exports = function(grunt) {
     nodeunit: {
       files: ['test/**/*_test.js'],
     },
-    concat: {
-      options: {
-        separator: '\n',
-      },
-      dist: {
-        src: ['main/browser.js',sources],
-        dest: 'build/concat.js',
-      },
-    },
-    uglify: {
-      options: {
-        banner: '<%= banner %>'
-      },
-      dist: {
-        src: '<%= concat.dist.dest %>',
-        dest: 'build/<%= pkg.name %>.min.js'
-      }
-    },
     jshint: {
       options: {
         jshintrc: '.jshintrc'
@@ -39,7 +21,7 @@ module.exports = function(grunt) {
         src: 'Gruntfile.js'
       },
       lib: {
-        src: ['main/node.js',sources]
+        src: [sources]
       },
       test: {
         src: ['test/**/*.js']
@@ -59,18 +41,23 @@ module.exports = function(grunt) {
         tasks: ['jshint:test', 'nodeunit']
       },
     },
+    browserify:{
+      dev: {
+        src: [sources],
+        dest: 'out.js',
+      }
+    }
   });
 
   // These plugins provide necessary tasks.
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-browserify');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'nodeunit','concat','uglify']);
+  grunt.registerTask('default', ['jshint', 'nodeunit']);
   grunt.registerTask('test', ['nodeunit']);
   grunt.registerTask('hint', ['jshint']);
-  grunt.registerTask('build', ['concat','uglify']);
+  grunt.registerTask('build', ['browserify']);
 };
