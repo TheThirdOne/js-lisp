@@ -27,6 +27,15 @@ module.exports = function(grunt) {
         src: ['test/**/*.js']
       },
     },
+    uglify: {
+       options: {
+         banner: '<%= banner %>'
+       },
+       dist: {
+         src: '<%= browserify.dev.dest %>',
+         dest: '<%= pkg.name %>.min.js'
+       }
+     },
     watch: {
       gruntfile: {
         files: '<%= jshint.gruntfile.src %>',
@@ -44,7 +53,7 @@ module.exports = function(grunt) {
     browserify:{
       dev: {
         src: [sources],
-        dest: 'out.js',
+        dest: '<%= pkg.name %>.js',
       }
     }
   });
@@ -53,11 +62,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-browserify');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'nodeunit','browserify']);
+  grunt.registerTask('default', ['test', 'hint','build']);
   grunt.registerTask('test', ['nodeunit']);
   grunt.registerTask('hint', ['jshint']);
-  grunt.registerTask('build', ['browserify']);
+  grunt.registerTask('build', ['browserify','uglify']);
 };
