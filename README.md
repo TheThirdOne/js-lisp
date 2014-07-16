@@ -1,10 +1,15 @@
-JSLisp Stable: [![Build Status](https://drone.io/github.com/TheThirdOne/jslisp/status.png)](https://drone.io/github.com/TheThirdOne/jslisp/latest) Latest: [![Build Status](https://drone.io/github.com/TheThirdOne/js-lisp/status.png)](https://drone.io/github.com/TheThirdOne/js-lisp/latest)
+JSLisp
 =======
-[Latest Build (min)](https://drone.io/github.com/TheThirdOne/js-lisp/files/jslisp.min.js)
-[Latest Build](https://drone.io/github.com/TheThirdOne/js-lisp/files/jslisp.js)
 
-[Latest Stable (min)](https://drone.io/github.com/TheThirdOne/jslisp/files/jslisp.min.js)
+Stable: [![Build Status](https://drone.io/github.com/TheThirdOne/jslisp/status.png)](https://drone.io/github.com/TheThirdOne/jslisp/latest)
+Latest: [![Build Status](https://drone.io/github.com/TheThirdOne/js-lisp/status.png)](https://drone.io/github.com/TheThirdOne/js-lisp/latest)
+-------
+
+[Latest Build](https://drone.io/github.com/TheThirdOne/js-lisp/files/jslisp.js)
+[(min)](https://drone.io/github.com/TheThirdOne/js-lisp/files/jslisp.min.js)
+
 [Latest Stable](https://drone.io/github.com/TheThirdOne/jslisp/files/jslisp.js)
+[(min)](https://drone.io/github.com/TheThirdOne/jslisp/files/jslisp.min.js)
 
 Lisp implemented only in JavaScript. Heavy influence from ClojureScript, Haskell and of course JavaScript. Mainly made to increase my knowledge of compiler theory, but also to make a really easily compiled lisp that can run anywhere.
 
