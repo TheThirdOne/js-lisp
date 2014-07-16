@@ -1,8 +1,7 @@
 JSLisp
 =======
 
-Stable: [![Build Status](https://drone.io/github.com/TheThirdOne/jslisp/status.png)](https://drone.io/github.com/TheThirdOne/jslisp/latest)
-Latest: [![Build Status](https://drone.io/github.com/TheThirdOne/js-lisp/status.png)](https://drone.io/github.com/TheThirdOne/js-lisp/latest)
+Stable: [![Build Status](https://drone.io/github.com/TheThirdOne/jslisp/status.png)](https://drone.io/github.com/TheThirdOne/jslisp/latest) Latest: [![Build Status](https://drone.io/github.com/TheThirdOne/js-lisp/status.png)](https://drone.io/github.com/TheThirdOne/js-lisp/latest)
 -------
 
 [Latest Build](https://drone.io/github.com/TheThirdOne/js-lisp/files/jslisp.js)
