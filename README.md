@@ -1,7 +1,7 @@
 JSLisp [![Build Status](https://drone.io/github.com/TheThirdOne/js-lisp/status.png)](https://drone.io/github.com/TheThirdOne/js-lisp/latest)
 =======
-[Latest Build](https://drone.io/github.com/TheThirdOne/js-lisp/files/build/jslisp.min.js)
-
+[Latest Build (min)](https://drone.io/github.com/TheThirdOne/js-lisp/files/jslisp.min.js)
+[Latest Build](https://drone.io/github.com/TheThirdOne/js-lisp/files/jslisp.js)
 
 Lisp implemented only in JavaScript. Heavy influence from ClojureScript, Haskell and of course JavaScript. Mainly made to increase my knowledge of compiler theory, but also to make a really easily compiled lisp that can run anywhere.
 
@@ -15,13 +15,11 @@ Reasons for Creation:
   - In JavaScript
 
 TODO:
-  - **Variables**
-  - Compiling to Javascript
   - Finish STDlib
 
 How to Use
 ----------
 
-Before every commit make sure ```grunt hint test``` runs without errors.   
-Inorder to build a browser version run ```grunt build```.   
+Before every commit make sure ```grunt hint test``` runs without errors.
+Inorder to build a browser version run ```grunt build```.
 Or if it hasn't been tested yet ```grunt```.
