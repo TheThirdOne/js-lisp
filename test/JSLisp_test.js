@@ -1,6 +1,8 @@
 'use strict';
 
-//var JSLisp = require('../main/node.js');
+var input   = require('../lib/input.js');
+var parser  = require('../lib/parser.js');
+//var codegen = require('../lib/codegen.js');
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -28,8 +30,40 @@ exports.compiler = {
     done();
   },
   'no args': function(test) {
-    test.expect(1);
-    test.equal(1,1);
+    test.expect(2);
+    test.tokenTest = function(str,out){
+      input.set(str);
+      var tmp = [],
+      t = parser.getTok();
+      while(t.token !== 'EOF'){
+        tmp.push(t);
+        t = parser.getTok();
+      }
+      test.deepEqual(tmp,out,str);
+    };
+    test.parserTest = function(str,out){
+      input.set(str);
+      test.deepEqual(parser.parseExprs(),out,str);
+    };
+    
+    //basic tokenizer test: ensures all types of tokens can be parsed
+    test.tokenTest('( ) ; a \n a "a\\"" 1.2 \'',[{ token: '(', index: 1 },
+                                                 { token: ')', index: 3 },
+                                                 { token: 'identifier', data: 'a', index: 11 },
+                                                 { token: 'string', data: 'a\\"', primary: true, index: 17 },
+                                                 { token: 'number', data: 1.2, primary: true, index: 21 },
+                                                 { token: '\'', index:23}]);
+                                                 
+    //basic parser test: ensures structures can generate correctly
+    test.parserTest('(a b 1.23 "c" ((d e) f))(g h)',[[{"token":"identifier","data":"a","index":2},
+                                                      {"token":"identifier","data":"b","index":4},
+                                                      {"token":"number","data":1.23,"primary":true,"index":9},
+                                                      {"token":"string","data":"c","primary":true,"index":13},
+                                                      [[{"token":"identifier","data":"d","index":17},
+                                                        {"token":"identifier","data":"e","index":19}],
+                                                        {"token":"identifier","data":"f","index":22}]],
+                                                      [{"token":"identifier","data":"g","index":26},
+                                                       {"token":"identifier","data":"h","index":28}]]);
     // tests here
     /*test.arr_equal = function(actual,expected,message){
       test.equal(actual.toString(),expected.toString(),message);
