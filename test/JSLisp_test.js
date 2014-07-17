@@ -1,8 +1,10 @@
 'use strict';
 
+var code    = require('../lib/code.js');
 var input   = require('../lib/input.js');
 var parser  = require('../lib/parser.js');
-//var codegen = require('../lib/codegen.js');
+var codegen = require('../lib/codegen.js');
+
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -30,7 +32,7 @@ exports.compiler = {
     done();
   },
   'no args': function(test) {
-    test.expect(2);
+    test.expect(3);
     test.tokenTest = function(str,out){
       input.set(str);
       var tmp = [],
@@ -44,6 +46,14 @@ exports.compiler = {
     test.parserTest = function(str,out){
       input.set(str);
       test.deepEqual(parser.parseExprs(),out,str);
+    };
+    test.codegenTest = function(str,out){
+      input.set(str);
+      var t = parser.parseExprs();
+      t.unshift({token:'identifier',data:'do'});
+      codegen(t);
+      test.deepEqual(code.finish(),out,str);
+      code.clear();
     };
     
     //basic tokenizer test: ensures all types of tokens can be parsed
@@ -64,6 +74,15 @@ exports.compiler = {
                                                         {"token":"identifier","data":"f","index":22}]],
                                                       [{"token":"identifier","data":"g","index":26},
                                                        {"token":"identifier","data":"h","index":28}]]);
+    
+    test.codegenTest('(+ 1 2.1 1) (- 3 4 3) (* 5 6 5) (/ 7 8 7) (% 9 10 9)',
+"var i = [], env = {};\n\
+i[0] = 0;\n\
+i[1] = (1 + 2.1 + 1);\n\
+i[2] = (3 - 4 - 3);\n\
+i[3] = (5 * 6 * 5);\n\
+i[4] = (7 / 8 / 7);\n\
+i[5] = (9 % 10 % 9);")
     // tests here
     /*test.arr_equal = function(actual,expected,message){
       test.equal(actual.toString(),expected.toString(),message);
