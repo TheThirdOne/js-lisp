@@ -82,7 +82,7 @@ i[1] = (1 + 2.1 + 1);\n\
 i[2] = (3 - 4 - 3);\n\
 i[3] = (5 * 6 * 5);\n\
 i[4] = (7 / 8 / 7);\n\
-i[5] = (9 % 10 % 9);")
+i[5] = (9 % 10 % 9);");
     // tests here
     /*test.arr_equal = function(actual,expected,message){
       test.equal(actual.toString(),expected.toString(),message);
