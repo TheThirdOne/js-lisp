@@ -4,7 +4,7 @@ var code    = require('../lib/code.js');
 var input   = require('../lib/input.js');
 var parser  = require('../lib/parser.js');
 var codegen = require('../lib/codegen.js');
-
+var int     = require('../lib/intermediate.js');
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -43,9 +43,9 @@ exports.compiler = {
       }
       test.deepEqual(tmp,out,str);
     };
-    test.parserTest = function(str,out){
+    test.parserTest = function(str,inter){
       input.set(str);
-      test.deepEqual(parser.parseExprs(),out,str);
+      test.deepEqual(parser.parseExprs(),int.fromString(inter),str);
     };
     test.codegenTest = function(str,out){
       input.set(str);
@@ -65,15 +65,7 @@ exports.compiler = {
                                                  { token: '\'', index:23}]);
                                                  
     //basic parser test: ensures structures can generate correctly
-    test.parserTest('(a b 1.23 "c" ((d e) f))(g h)',[[{"token":"identifier","data":"a","index":2},
-                                                      {"token":"identifier","data":"b","index":4},
-                                                      {"token":"number","data":1.23,"primary":true,"index":9},
-                                                      {"token":"string","data":"c","primary":true,"index":13},
-                                                      [[{"token":"identifier","data":"d","index":17},
-                                                        {"token":"identifier","data":"e","index":19}],
-                                                        {"token":"identifier","data":"f","index":22}]],
-                                                      [{"token":"identifier","data":"g","index":26},
-                                                       {"token":"identifier","data":"h","index":28}]]);
+    test.parserTest('(a b 1.23 "c" ((d e) f))(g h)','{"array":[{"index":2,"array":[{"token":"identifier","data":"a","index":2},{"token":"identifier","data":"b","index":4},{"token":"number","data":1.23,"primary":true,"index":9},{"token":"string","data":"c","primary":true,"index":13},{"index":16,"array":[{"index":17,"array":[{"token":"identifier","data":"d","index":17},{"token":"identifier","data":"e","index":19}]},{"token":"identifier","data":"f","index":22}]}]},{"index":26,"array":[{"token":"identifier","data":"g","index":26},{"token":"identifier","data":"h","index":28}]}]}');
     
     test.codegenTest('(+ 1 2.1 1) (- 3 4 3) (* 5 6 5) (/ 7 8 7) (% 9 10 9)',
 "var i = [], env = {};\n\
